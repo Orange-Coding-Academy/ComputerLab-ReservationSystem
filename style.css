@@ -1,0 +1,155 @@
+/* Computer Lab Reservation System - shared theme */
+:root {
+    --navy: #14213d;
+    --blue: #2563eb;
+    --blue-dark: #1d4ed8;
+    --teal: #0f766e;
+    --bg: #f3f6fb;
+    --white: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --green: #15803d;
+    --red: #dc2626;
+    --orange: #b45309;
+}
+
+
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: 36px 5%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+}
+body > h2:first-of-type {
+    margin: 0 0 22px;
+    color: var(--navy);
+    font-size: 28px;
+    font-weight: 750;
+}
+h2, h3 { color: var(--navy); }
+h3 { margin-top: 26px; }
+p { color: var(--muted); }
+
+/* Main page content */
+body > form, body > table, body > h3 + form,
+body > p, body > h2 ~ form {
+    max-width: 100%;
+}
+form {
+    margin: 16px 0 26px;
+    padding: 22px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 5px 18px rgba(15, 23, 42, .045);
+}
+label {
+    display: inline-block;
+    margin: 7px 0 5px;
+    color: #334155;
+    font-weight: 600;
+}
+input, select, textarea {
+    max-width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text);
+    font: inherit;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+input:not([type="submit"]):not([type="hidden"]), select, textarea { width: 100%; }
+input:focus, select:focus, textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+}
+input[type="submit"], button, input[type="button"] {
+    width: auto;
+    min-height: 39px;
+    padding: 9px 16px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--blue);
+    color: white;
+    font: inherit;
+    font-weight: 650;
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+}
+input[type="submit"]:hover, button:hover, input[type="button"]:hover {
+    background: var(--blue-dark);
+    transform: translateY(-1px);
+}
+#del{
+    background-color: var(--red) !important;
+}
+/* Navigation links */
+body > p:has(a) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    margin: 18px 0 28px;
+    padding: 13px;
+    background: var(--navy);
+    border-radius: 12px;
+}
+body > p:has(a) a {
+    display: inline-block;
+    padding: 8px 13px;
+    border-radius: 7px;
+    color: #eaf1ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+body > p:has(a) a:hover { background: rgba(255,255,255,.13); color: white; }
+a { color: var(--blue); font-weight: 600; }
+a:hover { color: var(--blue-dark); }
+
+/* Tables */
+table {
+    width: 100%;
+    margin: 16px 0 30px;
+    border: 1px solid var(--border) !important;
+    border-collapse: separate !important;
+    border-spacing: 0;
+    overflow: hidden;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(15, 23, 42, .045);
+}
+th, td {
+    padding: 13px 15px !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--border) !important;
+    text-align: left;
+    vertical-align: middle;
+}
+th { background: #eaf0fb; color: var(--navy); font-weight: 750; }
+tr:last-child td { border-bottom: 0 !important; }
+tbody tr:hover { background: #f8faff; }
+td form { margin: 0; padding: 0; background: transparent; border: 0; box-shadow: none; }
+td input, td select { min-width: 100px; }
+td input[type="submit"], td button { margin: 3px 2px; }
+
+/* Feedback messages */
+body > p:not(:has(a)) {
+    padding: 10px 13px;
+    border-radius: 8px;
+}
+
+@media (max-width: 760px) {
+    body { padding: 22px 4%; }
+    body > h2:first-of-type { font-size: 24px; }
+    table { display: block; overflow-x: auto; white-space: nowrap; }
+    form { padding: 16px; }
+    body > p:has(a) { gap: 4px; }
+}
