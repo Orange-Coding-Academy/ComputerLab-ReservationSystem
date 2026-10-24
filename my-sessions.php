@@ -44,8 +44,9 @@ $sql = $db_obj->getMySessions($_SESSION['id']);
 
 <h2>My Sessions</h2>
 
-<p>
+<p class="p">
     <a href="studentDashboard.php">Available Sessions</a> |
+     <a href="my-sessions.php">My Sessions</a> |
     <a href="profile.php">My Profile</a> 
 </p>
 
@@ -78,7 +79,7 @@ $sql = $db_obj->getMySessions($_SESSION['id']);
                     <form method="POST" action="my-sessions.php">
                         <input type="hidden" name="reservation_id"
                                value="<?php echo $row['reservation_id']; ?>">
-                        <button type="submit" name="cancel">
+                        <button type="submit" name="cancel" class="del">
                             Cancel Reservation
                         </button>
                     </form>

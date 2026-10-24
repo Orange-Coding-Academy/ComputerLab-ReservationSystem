@@ -38,7 +38,7 @@ $sql = $db_obj->getStudents();
 
 <p>Welcome, <?php echo htmlspecialchars($_SESSION['name']); ?></p>
 
-<p>
+<p class="p">
     <a href="adminDashboard.php">Students</a> |
     <a href="adminReservation.php">Reservation Requests</a> |
     <a href="adminSession.php">Manage Sessions</a> |
@@ -78,7 +78,7 @@ $sql = $db_obj->getStudents();
                     <input type="hidden" name="id"
                            value="<?php echo $row['id']; ?>">
 
-                    <button type="submit" name="delete" id="del">
+                    <button type="submit" name="delete" class="del">
                 <i class="fa-regular fa-trash-can"></i>
             </button>
                 </form>

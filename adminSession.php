@@ -53,9 +53,9 @@ $sessions = $db_obj->getAllSessions();
 </head>
 <body>
 
-<h2>Manage Sessions</h2>
+<h>Manage Sessions</h>
 
-<p>
+<p class="p">
     <a href="adminDashboard.php">Students</a> |
     <a href="adminReservation.php">Reservation Requests</a> |
     <a href="adminSession.php">Manage Sessions</a>|
@@ -101,7 +101,7 @@ $sessions = $db_obj->getAllSessions();
             <input type="hidden" name="id"
                    value="<?php echo $row['id']; ?>">
 
-            <button type="submit" name="delete" id="del">
+            <button type="submit" name="delete" class="del">
                 <i class="fa-regular fa-trash-can"></i>
             </button>
         </form>

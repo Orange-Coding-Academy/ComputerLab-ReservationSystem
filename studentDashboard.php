@@ -47,9 +47,10 @@ $sql = $db_obj->getAvailableSessions();
     Welcome, <?php echo htmlspecialchars($_SESSION['name']); ?>
 </p>
 
-<p>
+<p class="p">
+     <a href="studentDashboard.php">Available Sessions</a> |
     <a href="my-sessions.php">My Sessions</a> |
-    <a href="profile.php">My Profile</a> |
+    <a href="profile.php">My Profile</a> 
 </p>
 
 <table border="1" cellpadding="10">

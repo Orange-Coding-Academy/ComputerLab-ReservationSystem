@@ -43,7 +43,7 @@ $user = $db_obj->getProfile($_SESSION['id']);
 <body>
 
 <h2>My Profile</h2>
-<p>
+<p class="p">
     <a href="studentDashboard.php">Available Sessions</a> |
     <a href="my-sessions.php">My Sessions</a> |
     <a href="logout.php">Logout</a>

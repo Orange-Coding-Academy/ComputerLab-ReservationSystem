@@ -38,7 +38,7 @@ $sql = $db_obj->getAllReservations();
 
 <h2>Reservation Requests</h2>
 
-<p>
+<p class="p">
     <a href="adminDashboard.php">Students</a> |
     <a href="adminReservation.php">Reservation Requests</a> |
     <a href="adminSession.php">Manage Sessions</a>|
@@ -79,14 +79,14 @@ $sql = $db_obj->getAllReservations();
             <input type="hidden" name="reservation_id"
                    value="<?php echo $row['reservation_id']; ?>">
             <input type="hidden" name="status" value="confirmed">
-            <button type="submit" name="update" style=" background-color:green;"><i class="fa-solid fa-check"></i></button>
+            <button type="submit" name="update" id ="green"><i class="fa-solid fa-check"></i></button>
         </form>
 
         <form method="POST" action="adminReservation.php">
             <input type="hidden" name="reservation_id"
                    value="<?php echo $row['reservation_id']; ?>">
             <input type="hidden" name="status" value="rejected">
-            <button type="submit" name="update" id ="del"><i class="fa-solid fa-xmark"></i></button>
+            <button type="submit" name="update" class="del"><i class="fa-solid fa-xmark"></i></button>
         </form>
 
     <?php } else { ?>
