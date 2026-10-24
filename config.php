@@ -94,79 +94,68 @@ public function getAvailableSessions()
 
     return $stmt;
 }
-
 public function bookSession($user_id, $session_id)
 {
-    $this->db->beginTransaction();
+   
+    $sql = "SELECT labs.capacity
+            FROM sessions
+            INNER JOIN labs ON sessions.lab_id = labs.id
+            WHERE sessions.id = ?";
 
-    try {
-        $sql = "SELECT labs.capacity
-                FROM sessions
-                INNER JOIN labs ON sessions.lab_id = labs.id
-                WHERE sessions.id = ?
-                FOR UPDATE";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$session_id]);
+    $session = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$session) {
+        return "not_found";
+    }
+
+   
+    $sql = "SELECT id, status FROM reservations
+            WHERE user_id = ? AND session_id = ?";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$user_id, $session_id]);
+    $oldReservation = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($oldReservation &&
+        in_array($oldReservation['status'], ['pending', 'confirmed'])) {
+        return "already_booked";
+    }
+
+   
+    $sql = "SELECT COUNT(*) FROM reservations
+            WHERE session_id = ?
+            AND status IN ('pending', 'confirmed')";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$session_id]);
+    $booked = $stmt->fetchColumn();
+
+ 
+    if ($booked >= $session['capacity']) {
+        return "full";
+    }
+
+   
+    if ($oldReservation) {
+        $sql = "UPDATE reservations
+                SET status = 'pending'
+                WHERE id = ?";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([$session_id]);
-        $session = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->execute([$oldReservation['id']]);
 
-        if (!$session) {
-            $this->db->rollBack();
-            return "not_found";
-        }
-
-        $sql = "SELECT id, status FROM reservations
-                WHERE user_id = ? AND session_id = ?";
+    } else {
+        $sql = "INSERT INTO reservations
+                (user_id, session_id, status)
+                VALUES (?, ?, 'pending')";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$user_id, $session_id]);
-        $oldReservation = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($oldReservation &&
-            in_array($oldReservation['status'], ['pending', 'confirmed'])) {
-            $this->db->rollBack();
-            return "already_booked";
-        }
-
-        $sql = "SELECT COUNT(*) FROM reservations
-                WHERE session_id = ?
-                AND status IN ('pending', 'confirmed')";
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$session_id]);
-        $booked = $stmt->fetchColumn();
-
-        if ($booked >= $session['capacity']) {
-            $this->db->rollBack();
-            return "full";
-        }
-
-        if ($oldReservation) {
-            $sql = "UPDATE reservations
-                    SET status = 'pending'
-                    WHERE id = ?";
-
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute([$oldReservation['id']]);
-        } else {
-            $sql = "INSERT INTO reservations
-                    (user_id, session_id, status)
-                    VALUES (?, ?, 'pending')";
-
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute([$user_id, $session_id]);
-        }
-
-        $this->db->commit();
-        return "success";
-
-    } catch (Exception $e) {
-        if ($this->db->inTransaction()) {
-            $this->db->rollBack();
-        }
-
-        return "error";
     }
+
+    return "success";
 }
 
 public function cancelReservation($user_id, $reservation_id)
@@ -260,38 +249,24 @@ public function getStudents()
 
 public function deleteStudent($id)
 {
-    $this->db->beginTransaction();
+    $sql = "DELETE FROM reservations
+            WHERE user_id = ?";
 
-    try {
-        $sql = "DELETE FROM reservations
-                WHERE user_id = ?";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$id]);
 
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$id]);
+    $sql = "DELETE FROM users
+            WHERE id = ? AND role = 'student'";
 
-        $sql = "DELETE FROM users
-                WHERE id = ? AND role = 'student'";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$id]);
 
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$id]);
-
-        if ($stmt->rowCount() == 0) {
-            $this->db->rollBack();
-            return false;
-        }
-
-        $this->db->commit();
-        return true;
-
-    } catch (Exception $e) {
-        if ($this->db->inTransaction()) {
-            $this->db->rollBack();
-        }
-
+    if ($stmt->rowCount() == 0) {
         return false;
     }
-}
 
+    return true;
+}
 public function getAllReservations()
 {
     $sql = "SELECT reservations.id AS reservation_id,
